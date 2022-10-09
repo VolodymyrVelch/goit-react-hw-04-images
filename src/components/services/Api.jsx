@@ -10,15 +10,3 @@ export async function createRequest(search, page = 1) {
     const response = await axios.get(searchParams)
     return response
   }
-
-
-// export const addMaterial = async values => {
-//     // const response = await axios.get(`${baseURL}/?key=${apiKey}&?q=cat&page=1&image_type=photo&orientation=horizontal&per_page=12`) 
-//     const response = await axios.get(`https://pixabay.com/api/?q=cat&page=1&key=${apiKey}&image_type=photo&orientation=horizontal&per_page=12`) 
-//     console.log(response)
-// }
-// console.log(addMaterial)
-
-// id - унікальний ідентифікатор
-// webformatURL - посилання на маленьке зображення для списку карток
-// largeImageURL - посилання на велике зображення для модального вікна
