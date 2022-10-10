@@ -1,4 +1,4 @@
-// import PropTypes from 'prop-types';
+import PropTypes from 'prop-types';
 import { Formik, Form, Field } from "formik"
 import { SearchBar } from "./Searchbar.styled"
 import Notiflix from "notiflix"
@@ -50,3 +50,7 @@ export const Searchbar = ({onSubmit}) => {
     />
   </form>
 </header>
+
+Searchbar.propType={
+  onSubmit: PropTypes.func.isRequired
+}
