@@ -5,6 +5,7 @@ import { createRequest } from "components/services/Api"
 import { ImageGalleryItem } from "components/ImageGalleryItem/ImageGalleryItem"
 import { Button } from "components/Button/Button"
 import { Loader } from "components/Loader/Loader"
+import { SearchRequest, Error } from 'components/error&request/error&request';
 import Notiflix from "notiflix"
 
 
@@ -57,10 +58,10 @@ export class ImageGallery extends Component {
     render() {
         const { gallery, totalHits, page, status } = this.state
         if (status === 'idle') {
-            return (<p style={{ margin: '20px auto', fontSize: '20px' }} >"Please enter search request"</p>);
+            return <SearchRequest/>;
         }
         if (status === 'rejected') {
-            return (<p style={{ margin: '20px auto', fontSize: '20px' }} >"Error"</p>);
+            return <Error/>;
         }
         if (status === "pending") {
           return  <Loader/>
