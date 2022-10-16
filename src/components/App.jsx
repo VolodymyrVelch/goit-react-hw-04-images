@@ -1,27 +1,26 @@
-import { Component } from "react";
+import { useState } from "react";
 import { ImageGallery } from "./ImageGallery/ImageGallery";
 import { Searchbar } from "./Searchbar/Searchbar";
 import { Main } from './App.styled';
 
 
-export class App extends Component {
-  state = {
-    query: '',
-  } 
 
-  formSubmitData = (request) => {
+export const App =()=> {
+
+  const [query, setquery] = useState("");
+
+const formSubmitData = (request) => {
     const { query } = request
-    return this.setState({query})
+    return setquery(query)
   }    
-  
-  render() {
+
     return (
       <Main>
-        <Searchbar onSubmit={this.formSubmitData} />
-        <ImageGallery ImageGalleryData={this.state.query} />
+        <Searchbar onSubmit={formSubmitData} />
+        <ImageGallery ImageGalleryData={query} />
       </Main>
     );
   };
-}
+
 
 

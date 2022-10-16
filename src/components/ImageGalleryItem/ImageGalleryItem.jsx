@@ -1,36 +1,26 @@
 import PropTypes from 'prop-types';
 import { ImageGallery, Image } from './ImageGalleryItem.styled';
 import { Modal } from 'components/Modal/Modal';
-import { Component } from 'react';
+import { useState } from 'react';
 
-export class ImageGalleryItem extends Component{
-      static propTypes = {
-      src: PropTypes.string,
-      aleternative: PropTypes.string,
-      largeImg: PropTypes.string.isRequired,
-    };
+export const ImageGalleryItem =({smallImg, aleternative, largeImg})=>{
 
-
-    state= {
-    showModal:false
+const [showModal, setshowModal] = useState(false);
+    
+const  toggleModal = () => {
+    setshowModal(( showModal ) => ( !showModal));
     }
-    
-    toggleModal = () => {
-    this.setState(({ showModal }) => ({
-    showModal: !showModal,
-    }));
-    }
-    render() {
-    
-        const { src, aleternative, largeImg } = this.props
-     
-            return (
-                <ImageGallery >
-                    <Image onClick={this.toggleModal}  src={src} alt={aleternative} />
-                    {this.state.showModal && <Modal onClose={this.toggleModal}  largeImg={largeImg} aleternative={aleternative } />}
-                </ImageGallery>
-            )
-}
-}
-    
 
+    return (
+        <ImageGallery >
+            <Image onClick={toggleModal}  src={smallImg} alt={aleternative} />
+            {showModal && <Modal onClose={toggleModal}  largeImg={largeImg} aleternative={aleternative } />}
+        </ImageGallery>
+    )
+}
+
+ImageGalleryItem.propTypes = {
+smallImg: PropTypes.string,
+aleternative: PropTypes.string,
+largeImg: PropTypes.string.isRequired,
+};

@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import { Component } from "react"
+import { useEffect, useState } from "react"
 import { ImageGalleryList } from "./ImageGallery.styled"
 import { createRequest } from "components/services/Api"
 import { ImageGalleryItem } from "components/ImageGalleryItem/ImageGalleryItem"
@@ -9,54 +9,44 @@ import { SearchRequest, Error } from 'components/error&request/error&request';
 import Notiflix from "notiflix"
 
 
-export class ImageGallery extends Component {
+export const ImageGallery = ({ImageGalleryData}) => {
+    const [gallery, setgallery] = useState([]);
+    const [totalHits, settotalHits] = useState(null);
+    const [page, setpage] = useState(1);
+    const [status, setstatus] = useState('idle');
     
-      static propTypes = {
-      ImageGalleryData: PropTypes.string.isRequired,
-    };
-
-    state = {
-        gallery: [],
-        totalHits: null,
-        page: 1,
-        showModal:false,
-        status: 'idle',
-    } 
-    
-    componentDidUpdate(prevProps) {
-        if (this.props !== prevProps) {
-            this.setState({ status: "pending" })
-            createRequest(this.props.ImageGalleryData)
-                .then(respone => {
-                    const { data } = respone
-                    if (data.hits.length === 0) {
-                    Notiflix.Notify.failure('Your request has not reach a goal');
-                    }
-                    this.setState(_ => ({
-                        gallery: [...data.hits],
-                        totalHits: data.totalHits,
-                        page: 2,
-                        status: "resolved"
-                    }))
-                })
-                .catch(error=>this.setState({ status: "rejected" , error}))
-        }
+useEffect(() => {
+    if ( ImageGalleryData !== '') {
+        setstatus("pending")
+        createRequest(ImageGalleryData)
+            .then(respone => {
+                const { data } = respone
+                if (data.hits.length === 0) {
+                Notiflix.Notify.failure('Your request has not reach a goal');
+                }
+                setgallery([...data.hits])
+                settotalHits(data.totalHits)
+                setpage(2)
+                setstatus("resolved")
+            })
+            .catch(_=>setstatus("rejected"))
     }
-    loadMore = () => {
-        createRequest(this.props.ImageGalleryData, this.state.page)
+}, [ImageGalleryData]);
+
+ 
+    
+const loadMore = () => {
+        createRequest(ImageGalleryData, page)
         .then(respone => {
             const { data } = respone
-            this.setState(prevState  => ({
-                gallery: [...prevState.gallery, ...data.hits],
-                page: prevState.page + 1,
-                status: "resolved"
-                    }))
+            setgallery(prevState=> [...prevState, ...data.hits])
+            setpage(prevState=> prevState + 1)
+            setstatus("resolved")
                 }) 
-                .catch(error=>this.setState({ status: "rejected" , error}))
+            .catch(_=>setstatus("rejected"))
     }
 
-    render() {
-        const { gallery, totalHits, page, status } = this.state
+
         if (status === 'idle') {
             return <SearchRequest/>;
         }
@@ -64,7 +54,7 @@ export class ImageGallery extends Component {
             return <Error/>;
         }
         if (status === "pending") {
-          return  <Loader/>
+        return  <Loader/>
             
         }
         if (status === "resolved") {
@@ -75,15 +65,19 @@ export class ImageGallery extends Component {
                         {gallery.map(({ id, webformatURL, largeImageURL, tags }) =>
                         (<ImageGalleryItem
                             key={id}
-                            src={webformatURL}
+                            smallImg={webformatURL}
                             largeImg={largeImageURL}
                             aleternative={tags}
                             
                         />))}
                     </ImageGalleryList>
-                    {totalHits>=12*page && <Button loadMore={ this.loadMore}/>}   
+                    {totalHits>=12*page && <Button loadMore={loadMore}/>}   
                 </>
                 )
             }
         }
-}
+
+
+ImageGallery.propTypes = {
+ImageGalleryData: PropTypes.string.isRequired,
+};
