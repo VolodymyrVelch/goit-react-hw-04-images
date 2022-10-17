@@ -7,11 +7,11 @@ import { Main } from './App.styled';
 
 export const App =()=> {
 
-  const [query, setquery] = useState("");
+  const [query, setQuery] = useState("");
 
 const formSubmitData = (request) => {
     const { query } = request
-    return setquery(query)
+    return setQuery(query)
   }    
 
     return (

@@ -5,10 +5,10 @@ import { useState } from 'react';
 
 export const ImageGalleryItem =({smallImg, aleternative, largeImg})=>{
 
-const [showModal, setshowModal] = useState(false);
+const [showModal, setShowModal] = useState(false);
     
 const  toggleModal = () => {
-    setshowModal(( showModal ) => ( !showModal));
+    setShowModal(( showModal ) => ( !showModal));
     }
 
     return (

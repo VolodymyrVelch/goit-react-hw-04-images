@@ -10,26 +10,26 @@ import Notiflix from "notiflix"
 
 
 export const ImageGallery = ({ImageGalleryData}) => {
-    const [gallery, setgallery] = useState([]);
-    const [totalHits, settotalHits] = useState(null);
-    const [page, setpage] = useState(1);
-    const [status, setstatus] = useState('idle');
+    const [gallery, setGallery] = useState([]);
+    const [totalHits, setTotalHits] = useState(null);
+    const [page, setPage] = useState(1);
+    const [status, setStatus] = useState('idle');
     
 useEffect(() => {
     if ( ImageGalleryData !== '') {
-        setstatus("pending")
+        setStatus("pending")
         createRequest(ImageGalleryData)
             .then(respone => {
                 const { data } = respone
                 if (data.hits.length === 0) {
                 Notiflix.Notify.failure('Your request has not reach a goal');
                 }
-                setgallery([...data.hits])
-                settotalHits(data.totalHits)
-                setpage(2)
-                setstatus("resolved")
+                setGallery([...data.hits])
+                setTotalHits(data.totalHits)
+                setPage(2)
+                setStatus("resolved")
             })
-            .catch(_=>setstatus("rejected"))
+            .catch(_=>setStatus("rejected"))
     }
 }, [ImageGalleryData]);
 
@@ -39,11 +39,11 @@ const loadMore = () => {
         createRequest(ImageGalleryData, page)
         .then(respone => {
             const { data } = respone
-            setgallery(prevState=> [...prevState, ...data.hits])
-            setpage(prevState=> prevState + 1)
-            setstatus("resolved")
+            setGallery(prevState=> [...prevState, ...data.hits])
+            setPage(prevState=> prevState + 1)
+            setStatus("resolved")
                 }) 
-            .catch(_=>setstatus("rejected"))
+            .catch(_=>setStatus("rejected"))
     }
 
 
